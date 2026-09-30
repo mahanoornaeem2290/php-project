@@ -1,0 +1,59 @@
+<?php
+require __DIR__ . '/../includes/auth.php';
+redirectIfNotLoggedIn('../login.php');
+
+$pdo = getDbConnection();
+$messages = $pdo->query('SELECT id, name, email, message, created_at FROM contacts ORDER BY created_at DESC')->fetchAll();
+?>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Messages - Admin</title>
+    <link rel="stylesheet" href="../assets/styles.css">
+</head>
+<body class="admin-body">
+    <aside class="sidebar">
+        <div class="brand brand-admin">
+            <span class="brand-mark">PHP</span>
+            <span>Hub Admin</span>
+        </div>
+        <nav class="side-nav">
+            <a href="dashboard.php">Dashboard</a>
+            <a href="users.php">Users</a>
+            <a href="courses.php">Courses</a>
+            <a class="active" href="messages.php">Messages</a>
+            <a href="../logout.php">Logout</a>
+        </nav>
+    </aside>
+
+    <main class="admin-main">
+        <header class="admin-topbar">
+            <div>
+                <p class="eyebrow">Admin Panel</p>
+                <h1>Messages</h1>
+            </div>
+        </header>
+
+        <section class="panel full-width">
+            <table>
+                <thead>
+                    <tr><th>ID</th><th>Name</th><th>Email</th><th>Message</th><th>Received</th></tr>
+                </thead>
+                <tbody>
+                    <?php foreach ($messages as $message): ?>
+                        <tr>
+                            <td><?= (int) $message['id'] ?></td>
+                            <td><?= htmlspecialchars($message['name']) ?></td>
+                            <td><?= htmlspecialchars($message['email']) ?></td>
+                            <td><?= htmlspecialchars($message['message']) ?></td>
+                            <td><?= htmlspecialchars($message['created_at']) ?></td>
+                        </tr>
+                    <?php endforeach; ?>
+                </tbody>
+            </table>
+        </section>
+    </main>
+</body>
+</html>
